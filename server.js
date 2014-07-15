@@ -7,7 +7,7 @@ var mongoose = require('mongoose');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 
-var post = require('./models/post');
+require('./models/post');
 var posts = require('./controllers/posts');
 
 // Defining Express Middleware

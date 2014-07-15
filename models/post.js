@@ -1,11 +1,14 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var moment = require('../src/moment.min.js'); // Time formatter
 
 var PostSchema = new Schema({
   name: String,
   title: String,
   message: String,
-  createdAt: {type:Date, default: Date.now}
+  createdAt: {type:String, default: function() {
+    return moment().format('MMMM Do YYYY, h:mm a');  }
+  }
 });
 
 mongoose.model('post', PostSchema);
