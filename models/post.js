@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var moment = require('../src/moment.min.js'); // Time formatter
+var moment = require('../build/moment.min.js'); // Time formatter
 
 var PostSchema = new Schema({
   name: String,

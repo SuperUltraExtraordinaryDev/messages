@@ -2,19 +2,29 @@ var express = require('express');
 var app = express();
 var port = process.env.PORT || 8080;
 var mongoose = require('mongoose');
+var bcrypt = require('bcrypt');
 
 // Middleware
 var logger = require('morgan');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser'); // For user sessions
+var session = require('cookie-session');
 
+// Models need to be loaded before controllers
 require('./models/post');
+require('./models/user');
 var posts = require('./controllers/posts');
+var users = require('./controllers/users');
+
 
 // Defining Express Middleware
 app.use(logger());
 app.use('/', express.static(__dirname));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
+app.use(cookieSession({secret: 'key'}));
+
 
 var notImplemented = function(req,res) {
   res.send(501)
@@ -34,8 +44,13 @@ db.once('open', function () {
   app.delete('/posts/:postId', notImplemented); // Destroy
 
   // Comments
-  app.post('/posts/:postId/comments', notImplemented); 
-  app.delete('/posts/:postId/comments/:commentId', notImplemented); 
+  app.post('/posts/:postId/comments', notImplemented);
+  app.delete('/posts/:postId/comments/:commentId', notImplemented);
+
+  // Users
+  app.get('/users', users.index);
+  app.get('/users/new', users.new);
+  app.post('/users', users.create);
 
 
   app.listen(port, function(err) {
