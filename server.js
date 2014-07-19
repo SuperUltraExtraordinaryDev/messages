@@ -2,19 +2,19 @@ var express = require('express');
 var app = express();
 var port = process.env.PORT || 8080;
 var mongoose = require('mongoose');
-var bcrypt = require('bcrypt');
 
 // Middleware
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser'); // For user sessions
-var session = require('cookie-session');
+var cookieSession = require('cookie-session');
 
 // Models need to be loaded before controllers
 require('./models/post');
 require('./models/user');
 var posts = require('./controllers/posts');
 var users = require('./controllers/users');
+var sessions = require('./controllers/sessions');
 
 
 // Defining Express Middleware
@@ -49,8 +49,17 @@ db.once('open', function () {
 
   // Users
   app.get('/users', users.index);
-  app.get('/users/new', users.new);
+  app.get('/signup', users.new);
   app.post('/users', users.create);
+  app.put('/users/:userId', notImplemented);
+  app.delete('/users/:userId', notImplemented);
+  app.get('/signin', sessions.new);
+  app.post('/signin', sessions.create);
+  app.get('/signout', sessions.destroy);
+
+  app.param('postId', posts.load);
+  app.param('userId', users.load);
+  
 
 
   app.listen(port, function(err) {

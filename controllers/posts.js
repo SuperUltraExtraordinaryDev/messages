@@ -2,6 +2,17 @@ var mongoose = require('mongoose');
 var Post = mongoose.model('post');
 var controller = {}
 
+// Shared function to load Post from ID params
+
+controller.load = function(req,res,next,id) {
+  Post.findById(id, function(err,post) {
+    if(err) return next(err);
+    if(!post) return res.send(404);
+    req.post = post;
+    next();
+  });
+}
+
 controller.index = [
   function(req, res, next) {
     res.setHeader('Content-Type', 'application/json');
@@ -31,15 +42,6 @@ controller.create = [
 ];
 
 controller.update = [
-  function(req, res, next) {
-    // Load specified post using ID parameter
-    Post.findById(req.param('postId'), function(err,post) {
-      if(err) return next(err);
-      if(!post) return res.send(404);
-      req.post = post;
-      next();
-    });
-  },
   function(req, res, next) {
     // Update post, send back in JSON
     for(key in req.body) {

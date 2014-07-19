@@ -7,7 +7,10 @@
     "express": "*",
     "mongoose": "*",
     "morgan": "~1.1.1",
-    "body-parser": "~1.4.3"
+    "body-parser": "~1.4.3",
+    "bcrypt": "*",
+    "cookie-parser": "*",
+    "cookie-session": "*"
   },
   "author": "Peter",
   "license": "ISC"
